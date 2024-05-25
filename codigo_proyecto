@@ -1,1 +1,19 @@
 # Código del proyecto final de bioinformatica 
+# Revisión de calidad
+module load fastqc/0.11.7
+fastqc /home/reads/*.gz
+
+#eliminar kmeros erroneos 
+for i in $(cat names.txt)
+do
+run_rcorrector.pl -t 10 -1 "$i"_R1.fastq.gz -2 "$i"_R2.fastq.gz -od filtered_reads
+done 
+
+#filtrar secuencias incorregibles 
+ls *R1.cor.fq.gz > names.txt
+
+module load python/2.7.10
+for i in $(cat names.txt)
+do 
+python2 /opt/ohpc/pub/apps/TranscriptomeAssemblyTools/FilterUncorrectabledPEfastq.py -1 "$i"_R1.cor.fq.gz -2 "$i"_R2.cor.fq.gz -s "sufix"
+done 
