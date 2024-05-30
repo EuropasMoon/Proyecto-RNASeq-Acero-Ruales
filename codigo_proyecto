@@ -27,3 +27,6 @@ done
 #descargar bases de datos (eucariotas) 
 wget https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SILVA_138.1_LSUParc_tax_silva.fasta.gz
 wget https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SILVA_138.1_SSUParc_tax_silva.fasta.gz
+#No se pudo realizar este paso 
+
+
