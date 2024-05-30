@@ -52,3 +52,30 @@ module load perl/5.32.0
 Trinity --seqType fq --SS_lib_type RF --samples_file sequencelist.txt --max_memory 10G --CPU 12 \
 --min_contig_length 300 \
 --output ./trinity_out
+
+#Primer paso de la organización de los datos para análisis de expresión diferencial
+#!/bin/bash
+#SBATCH -p normal # Partición (cola)
+#SBATCH -N 1 # Número de nodos
+#SBATCH -n 12# Número de núcleos
+#SBATCH -t 0-24:00 # Límite de tiempo (D-HH:MM)
+#SBATCH -o salida_mapping.out # Salida STDOUT
+#SBATCH -e error_mapping.err # Salida STDERR
+#SBATCH --mem=10G
+# mail alert at start, end and abortion of execution
+#SBATCH --mail-type=ALL
+
+# send mail to this address
+#SBATCH --mail-user=correo@urosario.edu.co
+
+module load conda
+
+source activate /datacnmat01/biologia/biologia.evolutiva/fabianc.salgado/POCtrinity/
+module load perl/5.32.0
+module load rsem
+
+for i in $(cat names.txt)
+do
+align_and_estimate_abundance.pl --seqType fq --left unfixrm_"$i"_R1.cor_trimmed.fq --right unfixrm_"$i"_R2.cor_trimmed.fq --transcripts trinity_out/Trinity.fasta --est_method RSEM --aln_method bowtie --trinity_mode --prep_reference --output_dir ./unfixrm_"$i".RSEM
+done
+#No se pudo realizar este paso
