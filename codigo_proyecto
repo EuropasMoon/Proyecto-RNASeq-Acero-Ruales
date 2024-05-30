@@ -29,4 +29,26 @@ wget https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SI
 wget https://www.arb-silva.de/fileadmin/silva_databases/release_138_1/Exports/SILVA_138.1_SSUParc_tax_silva.fasta.gz
 #No se pudo realizar este paso 
 
+#Ensamblaje con trinity: trinity.sh 
+#!/bin/bash
+#SBATCH -p normal # Partición (cola)
+#SBATCH -N 1 # Número de nodos
+#SBATCH -n 12# Número de núcleos
+#SBATCH -t 0-24:00 # Límite de tiempo (D-HH:MM)
+#SBATCH -o salida_trinity.out # Salida STDOUT
+#SBATCH -e error_trinity.err # Salida STDERR
+#SBATCH --mem=10G
+# mail alert at start, end and abortion of execution
+#SBATCH --mail-type=ALL
 
+# send mail to this address
+#SBATCH --mail-user=correo@urosario.edu.co
+
+module load conda
+
+source activate /datacnmat01/biologia/biologia.evolutiva/fabianc.salgado/POCtrinity/
+module load perl/5.32.0
+
+Trinity --seqType fq --SS_lib_type RF --samples_file sequencelist.txt --max_memory 10G --CPU 12 \
+--min_contig_length 300 \
+--output ./trinity_out
